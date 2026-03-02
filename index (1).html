@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>OrgTrace — Monitor. Protect. Care.</title>
+<meta name="description" content="AI-powered employee monitoring with wellness notifications, compliance, DLP, and liveness detection. Built for enterprises that care about people."/>
+<style>
+  :root{
+    --bg:#060C1A;--card:#0F1C2E;--card2:#132236;
+    --accent:#6366F1;--accent2:#8B5CF6;--green:#10B981;
+    --teal:#06B6D4;--yellow:#F59E0B;--red:#EF4444;
+    --pink:#EC4899;--text:#F8FAFC;--muted:#94A3B8;--border:#1E293B;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;line-height:1.6;}
+  a{color:inherit;text-decoration:none;}
+
+  /* NAV */
+  nav{position:fixed;top:0;width:100%;z-index:100;
+      background:rgba(6,12,26,0.88);backdrop-filter:blur(14px);
+      border-bottom:1px solid var(--border);padding:0 5%;}
+  .nav-inner{max-width:1140px;margin:auto;display:flex;align-items:center;
+             justify-content:space-between;height:64px;}
+  .logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:18px;}
+  .logo-mark{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;
+             justify-content:center;font-size:13px;font-weight:900;
+             background:linear-gradient(135deg,#3B82F6,#6366F1);}
+  .nav-links{display:flex;gap:28px;font-size:14px;color:var(--muted);}
+  .nav-links a:hover{color:var(--text);transition:.2s;}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 22px;
+       border-radius:9px;font-weight:600;font-size:14px;cursor:pointer;
+       border:none;transition:all .2s;}
+  .btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;}
+  .btn-primary:hover{opacity:.88;transform:translateY(-1px);}
+  .btn-outline{background:transparent;color:var(--text);border:1px solid var(--border);}
+  .btn-outline:hover{border-color:var(--accent);color:var(--accent);}
+  .btn-lg{padding:14px 32px;font-size:16px;border-radius:11px;}
+  .btn-teal{background:linear-gradient(135deg,#0891B2,#06B6D4);color:#fff;}
+
+  /* HERO */
+  .hero{padding:150px 5% 90px;text-align:center;max-width:900px;margin:auto;}
+  .badge{display:inline-flex;align-items:center;gap:6px;
+         background:rgba(99,102,241,.12);color:#A5B4FC;
+         border:1px solid rgba(99,102,241,.3);border-radius:20px;
+         padding:5px 16px;font-size:12px;font-weight:600;margin-bottom:26px;}
+  .hero h1{font-size:clamp(2.4rem,5.5vw,3.8rem);font-weight:900;
+           line-height:1.12;margin-bottom:22px;}
+  .hero h1 .grad{background:linear-gradient(135deg,#6366F1,#A78BFA,#38BDF8);
+                 -webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+  .hero h1 .grad-green{background:linear-gradient(135deg,#10B981,#06B6D4);
+                        -webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+  .hero p{font-size:1.15rem;color:var(--muted);max-width:640px;margin:0 auto 38px;}
+  .hero-ctas{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+  .trial-note{margin-top:14px;font-size:12px;color:#475569;}
+
+  /* TAGLINE PILLS */
+  .tag-pills{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:36px;}
+  .pill{background:var(--card);border:1px solid var(--border);border-radius:20px;
+        padding:6px 16px;font-size:12px;color:var(--muted);}
+
+  /* STATS */
+  .stats-bar{background:var(--card);border-top:1px solid var(--border);
+             border-bottom:1px solid var(--border);padding:30px 5%;}
+  .stats-inner{max-width:1140px;margin:auto;display:flex;
+               justify-content:space-around;flex-wrap:wrap;gap:20px;text-align:center;}
+  .stat-val{font-size:2rem;font-weight:800;
+            background:linear-gradient(135deg,var(--accent),var(--accent2));
+            -webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+  .stat-lbl{font-size:12px;color:var(--muted);margin-top:4px;}
+
+  /* SECTION */
+  section{padding:86px 5%;}
+  .section-inner{max-width:1140px;margin:auto;}
+  .section-tag{font-size:11px;font-weight:700;letter-spacing:.1em;
+               color:var(--accent);text-transform:uppercase;margin-bottom:10px;}
+  .section-title{font-size:clamp(1.7rem,3.5vw,2.5rem);font-weight:800;margin-bottom:12px;}
+  .section-sub{color:var(--muted);font-size:1rem;max-width:580px;margin-bottom:50px;}
+
+  /* WELLNESS HIGHLIGHT */
+  .wellness-banner{background:linear-gradient(135deg,rgba(16,185,129,.1),rgba(6,182,212,.08));
+                   border:1px solid rgba(16,185,129,.25);border-radius:16px;
+                   padding:36px;margin-bottom:50px;display:flex;
+                   align-items:center;gap:28px;flex-wrap:wrap;}
+  .wellness-icon{font-size:52px;flex-shrink:0;}
+  .wellness-banner h3{font-size:1.3rem;font-weight:800;color:#34D399;margin-bottom:8px;}
+  .wellness-banner p{color:var(--muted);font-size:14px;max-width:600px;}
+  .wellness-badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;}
+  .w-badge{background:rgba(16,185,129,.12);border:1px solid rgba(16,185,129,.2);
+           color:#34D399;border-radius:20px;padding:4px 12px;font-size:11px;font-weight:600;}
+
+  /* FEATURES GRID */
+  .features-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:20px;}
+  .feat-card{background:var(--card);border:1px solid var(--border);border-radius:14px;
+             padding:26px;transition:border-color .25s,transform .25s;}
+  .feat-card:hover{border-color:var(--accent);transform:translateY(-3px);}
+  .feat-card.wellness{border-color:rgba(16,185,129,.3);}
+  .feat-card.wellness:hover{border-color:#10B981;}
+  .feat-icon{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;
+             justify-content:center;font-size:22px;margin-bottom:16px;}
+  .feat-card h3{font-size:15px;font-weight:700;margin-bottom:8px;}
+  .feat-card p{font-size:13px;color:var(--muted);line-height:1.65;}
+  .feat-tag{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;
+            border-radius:4px;margin-bottom:8px;text-transform:uppercase;}
+  .tag-new{background:rgba(16,185,129,.15);color:#34D399;}
+  .tag-pro{background:rgba(99,102,241,.15);color:#A5B4FC;}
+  .tag-ent{background:rgba(245,158,11,.12);color:#FCD34D;}
+
+  /* CAMERA SECTION */
+  .camera-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;}
+  .camera-card{background:var(--card);border:1px solid var(--border);
+               border-radius:14px;padding:28px;}
+  .camera-card h3{font-size:16px;font-weight:700;margin-bottom:10px;
+                  display:flex;align-items:center;gap:10px;}
+  .camera-card p{font-size:13px;color:var(--muted);line-height:1.7;}
+  .camera-card ul{list-style:none;margin-top:14px;display:flex;flex-direction:column;gap:8px;}
+  .camera-card ul li{font-size:13px;color:var(--muted);display:flex;align-items:flex-start;gap:8px;}
+  .camera-card ul li::before{content:"→";color:var(--teal);flex-shrink:0;}
+
+  /* STEPS */
+  .steps{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:24px;}
+  .step{text-align:center;padding:28px 16px;}
+  .step-num{width:50px;height:50px;border-radius:50%;
+            background:linear-gradient(135deg,var(--accent),var(--accent2));
+            display:flex;align-items:center;justify-content:center;
+            font-size:18px;font-weight:800;margin:0 auto 16px;}
+  .step h3{font-size:14px;font-weight:700;margin-bottom:8px;}
+  .step p{font-size:12px;color:var(--muted);}
+
+  /* PRICING */
+  .pricing-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:24px;}
+  .price-card{background:var(--card);border:1px solid var(--border);border-radius:16px;
+              padding:32px;position:relative;transition:transform .2s,border-color .2s;}
+  .price-card:hover{transform:translateY(-5px);}
+  .price-card.popular{border-color:var(--accent);background:var(--card2);}
+  .popular-badge{position:absolute;top:-13px;left:50%;transform:translateX(-50%);
+                 background:linear-gradient(135deg,var(--accent),var(--accent2));
+                 color:#fff;padding:4px 18px;border-radius:20px;
+                 font-size:11px;font-weight:700;white-space:nowrap;}
+  .price-tier{font-size:11px;font-weight:700;color:var(--muted);
+              text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;}
+  .price-val{font-size:2.8rem;font-weight:900;line-height:1;}
+  .price-val sup{font-size:1.2rem;vertical-align:top;margin-top:8px;}
+  .price-val span{font-size:1rem;color:var(--muted);font-weight:400;}
+  .price-desc{font-size:13px;color:var(--muted);margin:8px 0 24px;}
+  .price-features{list-style:none;display:flex;flex-direction:column;
+                  gap:10px;margin-bottom:28px;}
+  .price-features li{font-size:13px;display:flex;align-items:flex-start;gap:8px;}
+  .price-features li::before{content:"✓";color:var(--green);font-weight:700;flex-shrink:0;}
+  .price-features li.na{color:#475569;}
+  .price-features li.na::before{content:"–";color:#334155;}
+
+  /* ONPREM */
+  .onprem-card{background:linear-gradient(135deg,rgba(245,158,11,.08),rgba(251,191,36,.04));
+               border:1px solid rgba(245,158,11,.25);border-radius:16px;padding:40px;
+               display:flex;align-items:flex-start;gap:28px;flex-wrap:wrap;}
+  .onprem-icon{font-size:48px;flex-shrink:0;}
+  .onprem-card h3{font-size:1.4rem;font-weight:800;color:#FCD34D;margin-bottom:10px;}
+  .onprem-card p{color:var(--muted);font-size:14px;max-width:600px;margin-bottom:16px;}
+  .onprem-card ul{list-style:none;display:grid;
+                  grid-template-columns:1fr 1fr;gap:8px;max-width:600px;}
+  .onprem-card ul li{font-size:13px;color:var(--muted);
+                     display:flex;align-items:center;gap:6px;}
+  .onprem-card ul li::before{content:"🔒";font-size:11px;}
+
+  /* FORM */
+  .demo-section{background:var(--card);border-top:1px solid var(--border);
+                border-bottom:1px solid var(--border);}
+  .demo-inner{max-width:560px;margin:auto;text-align:center;}
+  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;}
+  .form-input{width:100%;background:#0A1628;border:1px solid var(--border);
+              border-radius:9px;padding:12px 14px;color:var(--text);
+              font-size:14px;outline:none;transition:border-color .2s;}
+  .form-input:focus{border-color:var(--accent);}
+  .form-input::placeholder{color:#334155;}
+  select.form-input option{background:#0A1628;}
+
+  /* FOOTER */
+  footer{background:var(--card);border-top:1px solid var(--border);padding:48px 5%;}
+  .footer-inner{max-width:1140px;margin:auto;display:grid;
+                grid-template-columns:1.5fr 1fr 1fr;gap:40px;flex-wrap:wrap;}
+  .footer-brand p{font-size:13px;color:#475569;margin-top:10px;max-width:260px;line-height:1.7;}
+  .footer-col h4{font-size:12px;font-weight:700;color:var(--muted);
+                 text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px;}
+  .footer-col a{display:block;font-size:13px;color:#475569;margin-bottom:8px;}
+  .footer-col a:hover{color:var(--muted);}
+  .footer-bottom{max-width:1140px;margin:32px auto 0;
+                 padding-top:24px;border-top:1px solid var(--border);
+                 display:flex;justify-content:space-between;align-items:center;
+                 flex-wrap:wrap;gap:12px;}
+  .footer-bottom p{font-size:12px;color:#334155;}
+  .made-with{font-size:12px;color:#334155;}
+  .made-with span{color:#EF4444;}
+
+  /* TOAST */
+  #toast{position:fixed;bottom:24px;right:24px;
+         background:linear-gradient(135deg,#10B981,#06B6D4);
+         color:#fff;padding:14px 24px;border-radius:11px;font-size:14px;
+         font-weight:600;transform:translateY(80px);opacity:0;
+         transition:all .3s;z-index:999;box-shadow:0 8px 24px rgba(0,0,0,.4);}
+  #toast.show{transform:translateY(0);opacity:1;}
+
+  @media(max-width:768px){
+    .nav-links{display:none;}
+    .form-row{grid-template-columns:1fr;}
+    .hero-ctas{flex-direction:column;align-items:center;}
+    .camera-grid{grid-template-columns:1fr;}
+    .footer-inner{grid-template-columns:1fr;}
+    .onprem-card ul{grid-template-columns:1fr;}
+    .footer-bottom{flex-direction:column;text-align:center;}
+  }
+</style>
+</head>
+<body>
+
+<div id="toast">✅ Request received! We'll email you within 24 hours.</div>
+
+<!-- NAV -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <div class="logo">
+      <div class="logo-mark">OT</div>
+      OrgTrace
+    </div>
+    <div class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#wellness">Wellness</a>
+      <a href="#camera">Camera</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#onprem">On-Premises</a>
+      <a href="#demo">Trial</a>
+    </div>
+    <div style="display:flex;gap:10px;">
+      <a href="#demo" class="btn btn-outline">Request Demo</a>
+      <a href="#demo" class="btn btn-primary">7-Day Free Trial →</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="badge">🧠 AI-Powered · Wellness-First · Enterprise-Ready</div>
+  <h1>Monitor. Protect.<br/><span class="grad">Comply.</span> <span class="grad-green">Care.</span></h1>
+  <p>The only employee monitoring platform that combines real-time compliance, AI liveness detection, DLP security — and actually cares about your team's wellbeing with built-in wellness notifications.</p>
+  <div class="hero-ctas">
+    <a href="#demo" class="btn btn-primary btn-lg">⬇ Start Free 7-Day Trial</a>
+    <a href="#demo" class="btn btn-outline btn-lg">Schedule a Demo</a>
+  </div>
+  <p class="trial-note">No credit card · Full-feature access · Windows 10/11 · Works offline</p>
+  <div class="tag-pills">
+    <span class="pill">⏱ Idle & Break Tracking</span>
+    <span class="pill">🤖 YOLOv8x Local AI</span>
+    <span class="pill">💚 Wellness Alerts</span>
+    <span class="pill">🔒 OTP Screen Lock</span>
+    <span class="pill">📸 Auto Screenshots</span>
+    <span class="pill">🏢 On-Premises Support</span>
+    <span class="pill">📋 DLP Protection</span>
+    <span class="pill">🎥 Admin Camera Control</span>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div><div class="stat-val">3x</div><div class="stat-lbl">Cheaper than Teramind</div></div>
+    <div><div class="stat-val">&lt; 10 min</div><div class="stat-lbl">MSI deployment time</div></div>
+    <div><div class="stat-val">100%</div><div class="stat-lbl">Offline AI — no data leaves</div></div>
+    <div><div class="stat-val">YOLOv8x</div><div class="stat-lbl">Local liveness & compliance</div></div>
+    <div><div class="stat-val">$3</div><div class="stat-lbl">Starting per user/month</div></div>
+  </div>
+</div>
+
+<!-- WELLNESS -->
+<section id="wellness">
+  <div class="section-inner">
+    <div class="section-tag">Employee Wellbeing</div>
+    <h2 class="section-title">Monitoring that actually cares</h2>
+    <p class="section-sub">OrgTrace isn't just about compliance — it actively protects your team's health and productivity.</p>
+
+    <div class="wellness-banner">
+      <div class="wellness-icon">💚</div>
+      <div>
+        <h3>Smart Wellness Notifications</h3>
+        <p>After every configurable work interval (default: 30–60 min of continuous work), OrgTrace gently notifies the employee to take a break — stretch, hydrate, rest their eyes. Admins set the interval. Employees feel the care.</p>
+        <div class="wellness-badges">
+          <span class="w-badge">⏱ Configurable work interval</span>
+          <span class="w-badge">🔔 Gentle desktop notification</span>
+          <span class="w-badge">👁 Eye strain prevention</span>
+          <span class="w-badge">🧘 Break reminders</span>
+          <span class="w-badge">💧 Hydration nudges</span>
+          <span class="w-badge">📊 Wellness report for HR</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features" style="padding-top:0;">
+  <div class="section-inner">
+    <div class="section-tag">Full Feature Set</div>
+    <h2 class="section-title">Everything your enterprise needs</h2>
+    <p class="section-sub">One platform. All departments. Configured per team.</p>
+    <div class="features-grid">
+
+      <div class="feat-card">
+        <span class="feat-tag tag-pro">Core</span>
+        <div class="feat-icon" style="background:rgba(16,185,129,.12);">⏱</div>
+        <h3>Session Time Tracking</h3>
+        <p>Login time, logout time, total active work, break time, screen lock count — all tracked per session with real-time admin visibility.</p>
+      </div>
+
+      <div class="feat-card wellness">
+        <span class="feat-tag tag-new">Wellness</span>
+        <div class="feat-icon" style="background:rgba(16,185,129,.12);">💚</div>
+        <h3>Wellness Break Notifications</h3>
+        <p>After 30–60 min of continuous work (admin-configurable), employees receive a friendly desktop notification to take a break. Eye strain, hydration, posture — covered.</p>
+      </div>
+
+      <div class="feat-card">
+        <span class="feat-tag tag-pro">Core</span>
+        <div class="feat-icon" style="background:rgba(245,158,11,.12);">😴</div>
+        <h3>Configurable Idle Detection</h3>
+        <p>Set idle threshold per department. Trigger an alert sound on the user's machine or auto-apply OTP screen lock — controlled remotely by admin.</p>
+      </div>
+
+      <div class="feat-card">
+        <span class="feat-tag tag-pro">Core</span>
+        <div class="feat-icon" style="background:rgba(99,102,241,.12);">📸</div>
+        <h3>Scheduled Screenshots</h3>
+        <p>Capture screens at admin-defined intervals with configurable quality. Stored securely in cloud or on-premises storage.</p>
+      </div>
+
+      <div class="feat-card">
+        <span class="feat-tag tag-pro">Security</span>
+        <div class="feat-icon" style="background:rgba(239,68,68,.12);">🔒</div>
+        <h3>Remote OTP Screen Lock</h3>
+        <p>Admin locks any user's screen with a 6-digit OTP. Full-screen overlay, multi-monitor, blocks Win key. User unlocks by entering OTP received from admin.</p>
+      </div>
+
+      <div class="feat-card">
+        <span class="feat-tag tag-pro">DLP</span>
+        <div class="feat-icon" style="background:rgba(59,130,246,.12);">📋</div>
+        <h3>Clipboard & Screenshot Block</h3>
+        <p>Prevent data leakage via clipboard copy-paste and PrintScreen key per department. Admin notified on every DLP breach attempt in real-time.</p>
+      </div>
+
+      <div class="feat-card">
+        <span class="feat-tag tag-ent">AI</span>
+        <div class="feat-icon" style="background:rgba(139,92,246,.12);">🤖</div>
+        <h3>YOLOv8x Local AI Detection</h3>
+        <p>Detects no-person, multiple persons, mobile phone usage — fully offline via local ONNX model. No video ever leaves the device. Toggle per department.</p>
+      </div>
+
+      <div class="feat-card">
+        <span class="feat-tag tag-ent">AI</span>
+        <div class="feat-icon" style="background:rgba(6,182,212,.12);">👁</div>
+        <h3>Liveness Detection</h3>
+        <p>Blink count and head movement tracking ensures the right person is at the workstation. Admin sets blink threshold and head movement degrees.</p>
+      </div>
+
+      <div class="feat-card wellness">
+        <span class="feat-tag tag-new">New</span>
+        <div class="feat-icon" style="background:rgba(236,72,153,.12);">🎥</div>
+        <h3>Admin Camera On-Demand</h3>
+        <p>Admin can activate the user's camera anytime — for meetings, identity checks, or compliance reviews. User is notified when camera is activated. Toggle from dashboard instantly.</p>
+      </div>
+
+      <div class="feat-card">
+        <span class="feat-tag tag-pro">Core</span>
+        <div class="feat-icon" style="background:rgba(16,185,129,.12);">🏢</div>
+        <h3>Department Management</h3>
+        <p>Create departments, assign configs, generate per-dept installer EXE automatically. Users auto-onboard by machine hostname on first launch.</p>
+      </div>
+
+      <div class="feat-card">
+        <span class="feat-tag tag-pro">Core</span>
+        <div class="feat-icon" style="background:rgba(20,184,166,.12);">💻</div>
+        <h3>Device Intelligence Panel</h3>
+        <p>See each user's IP, SSID, processor, OS, build version, org, department and camera type (USB vs Integrated) — all in one admin view.</p>
+      </div>
+
+      <div class="feat-card">
+        <span class="feat-tag tag-pro">Core</span>
+        <div class="feat-icon" style="background:rgba(245,158,11,.12);">💬</div>
+        <h3>Admin Messaging</h3>
+        <p>Send messages to individual users or entire departments. Appears as a banner in the agent UI. Read receipts included. No email needed.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CAMERA SECTION -->
+<section id="camera" style="background:var(--card);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
+  <div class="section-inner">
+    <div class="section-tag">Camera Intelligence</div>
+    <h2 class="section-title">Total camera control — in your hands</h2>
+    <p class="section-sub">OrgTrace gives admins and employees smart camera controls for compliance, meetings, and wellbeing.</p>
+    <div class="camera-grid">
+      <div class="camera-card">
+        <h3>🎥 Admin-Controlled Camera</h3>
+        <p>Admins can activate any user's camera on-demand directly from the dashboard — no manual action needed from the employee's side.</p>
+        <ul>
+          <li>Turn on camera remotely for any user</li>
+          <li>Activate during meetings or identity checks</li>
+          <li>User receives a notification when camera is live</li>
+          <li>Admin sees live or captured frame in dashboard</li>
+          <li>Full audit log of every camera activation</li>
+        </ul>
+      </div>
+      <div class="camera-card">
+        <h3>🤖 AI Compliance Monitoring</h3>
+        <p>When compliance mode is on, the camera runs continuously with YOLOv8x AI — all processing happens locally on the device.</p>
+        <ul>
+          <li>No-person detection — user stepped away</li>
+          <li>Multi-person detection — shoulder surfing</li>
+          <li>Mobile phone detection — data risk</li>
+          <li>Liveness: blink count + head movement</li>
+          <li>Detects USB vs Integrated camera automatically</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how">
+  <div class="section-inner">
+    <div class="section-tag">Setup in Minutes</div>
+    <h2 class="section-title">From zero to monitoring in 10 minutes</h2>
+    <p class="section-sub">No server config. No IT expertise needed.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <h3>Admin Signs Up</h3>
+        <p>Email OTP verification. Org provisioned instantly. Seats allocated by your plan.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <h3>Create Departments</h3>
+        <p>Each department gets a unique installer EXE generated in under 2 minutes.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <h3>Distribute EXE</h3>
+        <p>Share via email, SCCM or Intune. File: <em>OrgTrace_Acme_Dev_20260302.exe</em></p>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <h3>Employees Onboard</h3>
+        <p>First launch auto-registers by hostname. Employee fills name + email in a one-time popup.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <h3>Configure & Monitor</h3>
+        <p>Set idle thresholds, wellness intervals, screenshot timings, YOLO rules — all per department.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ON-PREMISES -->
+<section id="onprem" style="background:var(--card);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
+  <div class="section-inner">
+    <div class="section-tag">Enterprise Deployment</div>
+    <h2 class="section-title">Full On-Premises Support</h2>
+    <p class="section-sub">Data-sensitive organisations can run OrgTrace entirely within their own infrastructure.</p>
+    <div class="onprem-card">
+      <div class="onprem-icon">🏛</div>
+      <div>
+        <h3>Your data. Your servers. Your rules.</h3>
+        <p>OrgTrace supports full on-premises deployment — all data stays within your corporate network. No cloud dependency. No external data transfer. Perfect for banking, defence, healthcare, and government sectors.</p>
+        <ul>
+          <li>Self-hosted Supabase (Docker / bare metal)</li>
+          <li>No internet required after setup</li>
+          <li>Local AI inference — YOLO runs on device</li>
+          <li>Internal network screensharing storage</li>
+          <li>LDAP / Active Directory integration</li>
+          <li>Custom MSI with internal server URLs</li>
+          <li>Dedicated setup support included</li>
+          <li>Compliance-ready audit logs</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing">
+  <div class="section-inner">
+    <div class="section-tag">Transparent Pricing</div>
+    <h2 class="section-title">Pay only for monitored users</h2>
+    <p class="section-sub">No minimums. No hidden fees. Cancel anytime. All plans include 7-day free trial.</p>
+    <div class="pricing-grid">
+
+      <div class="price-card">
+        <div class="price-tier">Basic Professional</div>
+        <div class="price-val"><sup>$</sup>3<span>/user/mo</span></div>
+        <div class="price-desc">Startups & SMBs (10–30 users)</div>
+        <ul class="price-features">
+          <li>Login &amp; logout tracking</li>
+          <li>Idle detection + alert sound</li>
+          <li>Active / break / lock time</li>
+          <li>Wellness break notifications</li>
+          <li>Admin messaging</li>
+          <li>Device info panel</li>
+          <li>Department management</li>
+          <li class="na">Screenshots</li>
+          <li class="na">DLP clipboard/screenshot block</li>
+          <li class="na">AI YOLO compliance</li>
+        </ul>
+        <a href="#demo" class="btn btn-outline" style="width:100%;justify-content:center;">Start Free Trial</a>
+      </div>
+
+      <div class="price-card popular">
+        <div class="popular-badge">MOST POPULAR</div>
+        <div class="price-tier">Intermediate</div>
+        <div class="price-val"><sup>$</sup>8<span>/user/mo</span></div>
+        <div class="price-desc">Growing orgs &amp; agencies</div>
+        <ul class="price-features">
+          <li>Everything in Basic</li>
+          <li>Scheduled screenshots</li>
+          <li>OTP screen lock</li>
+          <li>Admin camera on-demand</li>
+          <li>URL &amp; app monitoring</li>
+          <li>Productivity scoring</li>
+          <li>Reports &amp; CSV export</li>
+          <li class="na">DLP clipboard/screenshot block</li>
+          <li class="na">AI YOLO compliance</li>
+        </ul>
+        <a href="#demo" class="btn btn-primary" style="width:100%;justify-content:center;">Start Free Trial</a>
+      </div>
+
+      <div class="price-card">
+        <div class="price-tier">Advanced Enterprise</div>
+        <div class="price-val"><sup>$</sup>15<span>/user/mo</span></div>
+        <div class="price-desc">Compliance-heavy enterprises</div>
+        <ul class="price-features">
+          <li>Everything in Intermediate</li>
+          <li>DLP clipboard &amp; screenshot block</li>
+          <li>AI YOLO: mobile, multi-person, no-person</li>
+          <li>Liveness: blink + head movement</li>
+          <li>Camera continuous compliance</li>
+          <li>Breach log &amp; reports</li>
+          <li>On-premises deployment</li>
+          <li>LDAP / Active Directory</li>
+          <li>Priority support + setup assist</li>
+        </ul>
+        <a href="#demo" class="btn btn-outline" style="width:100%;justify-content:center;">Start Free Trial</a>
+      </div>
+
+    </div>
+    <p style="text-align:center;margin-top:30px;font-size:13px;color:#475569;">
+      50 users: OrgTrace Advanced = <strong style="color:var(--green)">$9,000/yr</strong> &nbsp;·&nbsp;
+      Teramind = $37,500/yr &nbsp;·&nbsp; <strong style="color:var(--green)">You save $28,500/yr</strong>
+    </p>
+  </div>
+</section>
+
+<!-- DEMO FORM -->
+<section id="demo" class="demo-section">
+  <div class="section-inner">
+    <div class="demo-inner">
+      <div class="section-tag" style="text-align:center;">Get Started</div>
+      <h2 class="section-title">Start your 7-day free trial</h2>
+      <p style="color:var(--muted);margin-bottom:36px;">Full-feature access. No credit card. We'll send your trial installer within 24 hours.</p>
+      <form id="trialForm" onsubmit="submitForm(event)">
+        <div class="form-row">
+          <input class="form-input" type="text"   id="f-name"    placeholder="Full Name *" required/>
+          <input class="form-input" type="email"  id="f-email"   placeholder="Work Email *" required/>
+        </div>
+        <div class="form-row">
+          <input class="form-input" type="text"   id="f-company" placeholder="Company Name *" required/>
+          <input class="form-input" type="number" id="f-users"   placeholder="No. of Employees *" min="1" required/>
+        </div>
+        <select class="form-input" id="f-role" style="margin-bottom:12px;" required>
+          <option value="" disabled selected>Your Role *</option>
+          <option>IT Manager</option>
+          <option>HR Manager</option>
+          <option>VP Operations</option>
+          <option>CTO / CIO</option>
+          <option>CISO</option>
+          <option>Founder / CEO</option>
+          <option>Other</option>
+        </select>
+        <select class="form-input" id="f-plan" style="margin-bottom:12px;">
+          <option value="" disabled selected>Interested Plan (optional)</option>
+          <option>Basic Professional — $3/user/mo</option>
+          <option>Intermediate — $8/user/mo</option>
+          <option>Advanced Enterprise — $15/user/mo</option>
+          <option>On-Premises Deployment</option>
+        </select>
+        <select class="form-input" id="f-deploy" style="margin-bottom:20px;">
+          <option value="" disabled selected>Deployment preference (optional)</option>
+          <option>Cloud (Supabase hosted)</option>
+          <option>On-Premises (self-hosted)</option>
+          <option>Not sure yet</option>
+        </select>
+        <button type="submit" class="btn btn-primary btn-lg"
+                style="width:100%;justify-content:center;">
+          🚀 Get My Free 7-Day Trial
+        </button>
+        <p id="form-msg" style="margin-top:12px;font-size:13px;color:var(--muted);min-height:20px;"></p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="logo" style="margin-bottom:12px;">
+        <div class="logo-mark">OT</div>
+        OrgTrace
+      </div>
+      <p>We're changing how the world thinks about employee monitoring — from surveillance to wellness-first, compliance-ready, people-centric productivity.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Product</h4>
+      <a href="#features">Features</a>
+      <a href="#wellness">Wellness</a>
+      <a href="#camera">Camera Control</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#onprem">On-Premises</a>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <a href="#demo">Request Demo</a>
+      <a href="#demo">Contact Us</a>
+      <a href="#demo">Free Trial</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 OrgTrace. All rights reserved.</p>
+    <p class="made-with">Made with <span>♥</span> by OrgTrace &amp; Team</p>
+  </div>
+</footer>
+
+<script>
+const SUPABASE_URL = 'https://YOUR_PROJECT.supabase.co';
+const SUPABASE_KEY = 'YOUR_ANON_KEY';
+
+async function submitForm(e) {
+  e.preventDefault();
+  const btn = document.querySelector('#trialForm button[type=submit]');
+  btn.disabled = true; btn.textContent = 'Submitting...';
+
+  const payload = {
+    full_name:      document.getElementById('f-name').value.trim(),
+    email:          document.getElementById('f-email').value.trim(),
+    company:        document.getElementById('f-company').value.trim(),
+    employee_count: parseInt(document.getElementById('f-users').value),
+    role:           document.getElementById('f-role').value,
+    plan_interest:  document.getElementById('f-plan').value,
+    deploy_pref:    document.getElementById('f-deploy').value,
+    source:         'landing_page',
+    created_at:     new Date().toISOString()
+  };
+
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/leads`, {
+      method: 'POST',
+      headers: {
+        'apikey': SUPABASE_KEY,
+        'Authorization': `Bearer ${SUPABASE_KEY}`,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify(payload)
+    });
+    showToast();
+    document.getElementById('trialForm').reset();
+  } catch {
+    showToast();
+    document.getElementById('trialForm').reset();
+  }
+
+  btn.disabled = false;
+  btn.textContent = '🚀 Get My Free 7-Day Trial';
+}
+
+function showToast() {
+  const t = document.getElementById('toast');
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 4500);
+}
+
+window.addEventListener('scroll', () => {
+  document.getElementById('navbar').style.background =
+    window.scrollY > 50 ? 'rgba(6,12,26,.98)' : 'rgba(6,12,26,.88)';
+});
+</script>
+</body>
+</html>
