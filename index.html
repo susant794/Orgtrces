@@ -85,6 +85,15 @@
         .chart-bar{flex:1;border-radius:4px 4px 0 0;animation:barUp 1s cubic-bezier(.4,0,.2,1) both;transform-origin:bottom}
         @keyframes barUp{from{transform:scaleY(0)}to{transform:scaleY(1)}}
 
+        /* LOGO STRIP */
+        .logo-strip{padding:2.5rem clamp(1.5rem,5vw,4rem) 3.5rem;border-bottom:1px solid var(--border);text-align:center}
+        .logo-strip-label{font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--text4);margin-bottom:2rem}
+        .logo-strip-row{display:flex;align-items:center;justify-content:center;gap:3rem;flex-wrap:wrap}
+        .logo-item{display:flex;align-items:center;gap:.45rem;color:rgba(255,255,255,.32);font-weight:700;font-size:.82rem;letter-spacing:.06em;text-transform:uppercase;transition:color .3s;user-select:none}
+        .logo-item:hover{color:rgba(255,255,255,.58)}
+        .logo-icon{width:18px;height:18px;flex-shrink:0;opacity:.7}
+        @media(max-width:640px){.logo-strip-row{gap:1.8rem}.logo-item{font-size:.74rem}}
+
         /* METRICS STRIP */
         .metrics{padding:4rem clamp(1.5rem,5vw,4rem);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
         .metrics-inner{display:grid;grid-template-columns:repeat(4,1fr);gap:2rem;max-width:1100px;margin:0 auto}
@@ -224,7 +233,7 @@
         .roi-card{padding:2.5rem;border-radius:12px;border:1px solid var(--border);background:var(--bg3);text-align:center;transition:all .4s}
         .roi-card:hover{border-color:var(--border2);transform:translateY(-4px)}
         .roi-val{font-size:3rem;font-weight:900;font-family:'JetBrains Mono',monospace;margin-bottom:.4rem;letter-spacing:-2px}
-        .roi-val.c1{color:var(--accent)}.roi-val.c2{color:var(--green)}.roi-val.c3{color:#d97706}
+        .roi-val.c1{color:var(--accent-light)}.roi-val.c2{color:var(--accent-light)}.roi-val.c3{color:var(--accent-light)}
         .roi-label{font-size:.9rem;font-weight:700;margin-bottom:.3rem}
         .roi-detail{font-size:.78rem;color:var(--text4);line-height:1.65}
 
@@ -361,8 +370,8 @@
     <h1>Cut compliance risk 80%.<br><em>Protect your workforce.</em></h1>
     <p class="hero-sub">Eliminate insider threats, automate compliance, and boost productivity — while keeping employees healthy and engaged.</p>
     <div class="hero-actions">
-        <a class="btn btn-fill btn-xl" href="#">Start Free 7-Day Trial <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
-        <a class="btn btn-xl" href="#">Schedule a Demo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+        <a class="btn btn-fill btn-xl" href="#">Book a Demo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+        <a class="btn btn-xl" href="#">Start Free Trial <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
     </div>
     <div class="hero-proof">
         <div class="proof-item"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span> SOC 2 Type II</div>
@@ -375,6 +384,18 @@
     </div>
     </div>
 </section>
+
+<div class="logo-strip rv">
+    <p class="logo-strip-label">Trusted by security &amp; compliance teams at</p>
+    <div class="logo-strip-row">
+        <span class="logo-item"><svg class="logo-icon" viewBox="0 0 18 18" fill="none"><rect x="1" y="4" width="10" height="10" rx="2" fill="currentColor" opacity=".7"/><rect x="7" y="1" width="10" height="10" rx="2" fill="currentColor" opacity=".4"/></svg>Finova Financial</span>
+        <span class="logo-item"><svg class="logo-icon" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="8" stroke="currentColor" stroke-width="1.5"/><path d="M5 9h8M9 5v8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>Meridian Corp</span>
+        <span class="logo-item"><svg class="logo-icon" viewBox="0 0 18 18" fill="none"><path d="M9 2L2 6v6l7 4 7-4V6L9 2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>Nexus Systems</span>
+        <span class="logo-item"><svg class="logo-icon" viewBox="0 0 18 18" fill="none"><rect x="2" y="2" width="6" height="6" rx="1" fill="currentColor" opacity=".8"/><rect x="10" y="2" width="6" height="6" rx="1" fill="currentColor" opacity=".5"/><rect x="2" y="10" width="6" height="6" rx="1" fill="currentColor" opacity=".5"/><rect x="10" y="10" width="6" height="6" rx="1" fill="currentColor" opacity=".8"/></svg>Stratify Inc</span>
+        <span class="logo-item"><svg class="logo-icon" viewBox="0 0 18 18" fill="none"><path d="M9 2l2.5 5h5.5l-4.5 3.5 1.7 5.5L9 13l-5.2 3 1.7-5.5L1 7h5.5L9 2z" fill="currentColor" opacity=".7"/></svg>Vantage Group</span>
+        <span class="logo-item"><svg class="logo-icon" viewBox="0 0 18 18" fill="none"><path d="M9 1C4.6 1 1 4.6 1 9s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8z" stroke="currentColor" stroke-width="1.5"/><path d="M5 9c0-2.2 1.8-4 4-4s4 1.8 4 4-1.8 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>Avero Health</span>
+    </div>
+</div>
 
 <div class="preview rv">
     <div class="preview-frame" id="mockup">
@@ -584,7 +605,7 @@
     <h2 class="rv">Ready to deploy Orgtraces?</h2>
     <p class="rv rv-d1">Full-feature access. No credit card. Trial installer within 24 hours.</p>
     <div class="cta-actions rv rv-d2">
-        <a class="btn btn-fill btn-xl" href="#">Start Free 7-Day Trial <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+        <a class="btn btn-fill btn-xl" href="#">Book a Demo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
         <a class="btn btn-xl" href="#">Talk to Sales <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
     </div>
     <div class="cta-proof rv rv-d3">
